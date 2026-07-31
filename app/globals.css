@@ -1,0 +1,158 @@
+@import url('https://fonts.googleapis.com/css2?family=Oswald:wght@500;600;700&family=Inter:wght@400;500;600&family=IBM+Plex+Mono:wght@500&display=swap');
+
+:root {
+  --bg: #14130f;
+  --surface: #1e1c16;
+  --surface-2: #262319;
+  --border: #3a362a;
+  --gold: #b8912f;
+  --gold-bright: #d9b23e;
+  --text: #ede8dd;
+  --text-muted: #948e7d;
+  --sage: #7a9b7e;
+  --rust: #b5643d;
+  --slate: #7691a6;
+  --danger: #9c5240;
+}
+
+* { box-sizing: border-box; }
+
+html, body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: 'Inter', sans-serif;
+  margin: 0;
+  padding: 0;
+}
+
+:focus-visible { outline: 2px solid var(--gold-bright); outline-offset: 2px; }
+
+a { color: inherit; text-decoration: none; }
+
+.shell {
+  width: 100%;
+  max-width: 460px;
+  min-height: 100vh;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  background: var(--bg);
+  position: relative;
+}
+
+/* ---------- Header ---------- */
+.header { padding: 22px 20px 16px; border-bottom: 1px solid var(--border); }
+.brand { font-family: 'Oswald', sans-serif; font-weight: 700; letter-spacing: 0.06em; font-size: 20px; text-transform: uppercase; color: var(--text); }
+.brand span { color: var(--gold); }
+.brand-sub { font-family: 'IBM Plex Mono', monospace; font-size: 11px; color: var(--text-muted); margin-top: 2px; letter-spacing: 0.04em; }
+.header-row { display: flex; justify-content: space-between; align-items: flex-start; }
+.signout-btn { background: none; border: 1px solid var(--border); color: var(--text-muted); border-radius: 8px; padding: 7px 10px; display: flex; align-items: center; gap: 6px; font-size: 12px; cursor: pointer; }
+.signout-btn:hover { border-color: var(--gold); color: var(--gold); }
+
+/* ---------- Auth ---------- */
+.auth-wrap { flex: 1; display: flex; flex-direction: column; justify-content: center; padding: 32px 24px; }
+.auth-title { font-family: 'Oswald', sans-serif; font-size: 26px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; text-align: center; margin-bottom: 4px; }
+.auth-title span { color: var(--gold); }
+.auth-sub { text-align: center; color: var(--text-muted); font-size: 13px; margin-bottom: 28px; }
+.field { margin-bottom: 14px; }
+.field label { display: block; font-size: 12px; color: var(--text-muted); margin-bottom: 6px; text-transform: uppercase; letter-spacing: 0.04em; }
+.field input {
+  width: 100%; background: var(--surface); border: 1px solid var(--border); color: var(--text);
+  padding: 12px 14px; border-radius: 8px; font-size: 15px; font-family: 'Inter', sans-serif;
+}
+.field input:focus { border-color: var(--gold); }
+.primary-btn {
+  width: 100%; background: var(--gold); color: #1a1608; border: none; border-radius: 8px;
+  padding: 13px; font-weight: 600; font-size: 15px; cursor: pointer; margin-top: 6px;
+  display: flex; align-items: center; justify-content: center; gap: 8px;
+}
+.primary-btn:hover { background: var(--gold-bright); }
+.primary-btn:disabled { opacity: 0.6; cursor: default; }
+.switch-line { text-align: center; margin-top: 18px; font-size: 13px; color: var(--text-muted); }
+.switch-line a { color: var(--gold); text-decoration: underline; }
+.error-box { background: rgba(156,82,64,0.15); border: 1px solid var(--danger); color: #e2a493; padding: 10px 12px; border-radius: 8px; font-size: 13px; margin-bottom: 14px; }
+.info-box { background: rgba(122,155,126,0.15); border: 1px solid var(--sage); color: #b7d0ba; padding: 10px 12px; border-radius: 8px; font-size: 13px; margin-bottom: 14px; }
+
+/* ---------- Bead ledger ---------- */
+.bead-ledger { padding: 16px 20px 4px; }
+.bead-row { display: flex; gap: 6px; margin-bottom: 6px; }
+.bead {
+  flex: 1; aspect-ratio: 1; border-radius: 50%; display: flex; align-items: center; justify-content: center;
+  font-family: 'IBM Plex Mono', monospace; font-size: 9px; border: 1px solid var(--border); color: var(--text-muted);
+  background: var(--surface);
+}
+.bead-done { background: var(--gold); border-color: var(--gold); color: #1a1608; }
+.bead-today { border-color: var(--gold-bright); color: var(--gold-bright); box-shadow: 0 0 0 2px rgba(217,178,62,0.25); font-weight: 700; }
+.bead-missed { border-color: var(--danger); color: #8a5c50; opacity: 0.6; }
+.bead-upcoming { opacity: 0.45; }
+
+/* ---------- Today card ---------- */
+.main { flex: 1; overflow-y: auto; padding-bottom: 90px; }
+.today-status { text-align: center; padding: 40px 24px; color: var(--text-muted); }
+.today-status .big { font-family: 'Oswald', sans-serif; font-size: 20px; color: var(--text); margin-bottom: 8px; }
+
+.challenge-card { margin: 18px 20px; background: var(--surface); border: 1px solid var(--border); border-radius: 14px; padding: 22px; }
+.challenge-card.done { border-color: var(--gold); }
+.card-top { display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px; }
+.day-tag { font-family: 'IBM Plex Mono', monospace; font-size: 12px; color: var(--text-muted); letter-spacing: 0.04em; }
+.cat-pill { font-size: 11px; text-transform: uppercase; letter-spacing: 0.05em; padding: 3px 9px; border-radius: 20px; border: 1px solid var(--border); }
+.cat-physical { color: var(--gold); border-color: var(--gold); }
+.cat-faith { color: var(--sage); border-color: var(--sage); }
+.cat-mindset { color: var(--slate); border-color: var(--slate); }
+.cat-character { color: var(--rust); border-color: var(--rust); }
+.cat-finale { color: var(--gold-bright); border-color: var(--gold-bright); }
+.icon-row { font-size: 30px; margin-bottom: 10px; }
+.challenge-title { font-family: 'Oswald', sans-serif; font-size: 19px; font-weight: 600; margin-bottom: 8px; }
+.challenge-text { font-size: 17px; line-height: 1.5; }
+.challenge-body .block-intro { font-size: 15px; color: var(--text-muted); margin-bottom: 6px; }
+.block-list { margin: 0 0 8px 0; padding-left: 20px; font-size: 16px; line-height: 1.6; }
+.block-after { font-size: 14px; color: var(--text-muted); font-style: italic; }
+
+.tick-btn {
+  width: 100%; margin-top: 18px; padding: 14px; border-radius: 10px; border: none; cursor: pointer;
+  font-weight: 600; font-size: 15px; display: flex; align-items: center; justify-content: center; gap: 8px;
+  background: var(--gold); color: #1a1608;
+}
+.tick-btn:hover { background: var(--gold-bright); }
+.tick-btn:disabled { cursor: default; }
+.tick-btn.locked-done { background: var(--surface-2); color: var(--gold); border: 1px solid var(--gold); }
+
+/* ---------- Progress list ---------- */
+.progress-list { padding: 8px 20px; }
+.progress-row { display: flex; align-items: center; gap: 12px; padding: 12px 0; border-bottom: 1px solid var(--border); }
+.progress-row .pnum { font-family: 'IBM Plex Mono', monospace; font-size: 12px; color: var(--text-muted); width: 34px; }
+.progress-row .picon { font-size: 18px; width: 24px; }
+.progress-row .ptext { flex: 1; font-size: 13.5px; line-height: 1.4; }
+.progress-row .pstatus { font-size: 11px; padding: 3px 8px; border-radius: 20px; white-space: nowrap; }
+.pstatus-done { background: rgba(184,145,47,0.18); color: var(--gold); }
+.pstatus-missed { background: rgba(156,82,64,0.15); color: #c07a68; }
+.pstatus-today { background: rgba(217,178,62,0.18); color: var(--gold-bright); }
+.pstatus-preview { background: rgba(118,145,166,0.15); color: var(--slate); }
+.pstatus-locked { color: var(--text-muted); }
+.ptext-hidden { font-style: italic; color: var(--text-muted); }
+
+/* ---------- Leaderboard ---------- */
+.lb-list { padding: 8px 20px; }
+.lb-row { display: flex; align-items: center; gap: 14px; padding: 13px 14px; background: var(--surface); border: 1px solid var(--border); border-radius: 10px; margin-bottom: 8px; }
+.lb-row.me { border-color: var(--gold); }
+.lb-rank { font-family: 'Oswald', sans-serif; font-size: 16px; color: var(--text-muted); width: 24px; }
+.lb-rank.top { color: var(--gold-bright); }
+.lb-name { flex: 1; font-size: 14.5px; font-weight: 500; }
+.lb-score { font-family: 'IBM Plex Mono', monospace; font-size: 14px; color: var(--gold); }
+.empty-msg { text-align: center; color: var(--text-muted); padding: 40px 20px; font-size: 14px; }
+
+/* ---------- Bottom nav ---------- */
+.bottom-nav {
+  position: fixed; bottom: 0; left: 50%; transform: translateX(-50%);
+  display: flex; border-top: 1px solid var(--border);
+  background: var(--surface); max-width: 460px; width: 100%;
+}
+.nav-btn {
+  flex: 1; padding: 14px 0 12px; background: none; border: none; color: var(--text-muted);
+  font-size: 11px; display: flex; flex-direction: column; align-items: center; gap: 4px; cursor: pointer;
+}
+.nav-btn.active { color: var(--gold); }
+
+.spin { animation: aec-spin 0.8s linear infinite; }
+@keyframes aec-spin { to { transform: rotate(360deg); } }
+@media (prefers-reduced-motion: reduce) { .spin { animation: none; } }
