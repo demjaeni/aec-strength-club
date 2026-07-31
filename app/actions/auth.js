@@ -23,13 +23,6 @@ export async function signUp(prevState, formData) {
 
   if (error) return { error: error.message };
 
-  if (data.user) {
-    const { error: profileError } = await supabase
-      .from('profiles')
-      .upsert({ id: data.user.id, name });
-    if (profileError) return { error: profileError.message };
-  }
-
   if (!data.session) {
     return { error: null, message: 'Check your email to confirm your account, then sign in.' };
   }
