@@ -2,7 +2,7 @@
 
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { Check, Lock, Trophy } from 'lucide-react';
+import { Check, Lock, Trophy, User } from 'lucide-react';
 
 export default function BottomNav() {
   const pathname = usePathname();
@@ -18,6 +18,9 @@ export default function BottomNav() {
       </Link>
       <Link href="/leaderboard" className={`nav-btn ${isActive('/leaderboard') ? 'active' : ''}`}>
         <Trophy size={18} /> Leaderboard
+      </Link>
+      <Link href="/dashboard" className={`nav-btn ${isActive('/dashboard') ? 'active' : ''}`}>
+        <User size={18} /> Dashboard
       </Link>
     </div>
   );

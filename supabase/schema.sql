@@ -91,3 +91,29 @@ create or replace view leaderboard as
   group by profiles.id, profiles.name;
 
 grant select on leaderboard to authenticated;
+
+-- Badges: permanent, once-earned records. Awarding logic lives in the app
+-- (lib/badges.js) and runs as the member's own authenticated session, so
+-- insert stays restricted to their own rows just like completions. There is
+-- intentionally no update or delete policy — a badge is never revoked, even
+-- if the condition that earned it (e.g. a top-10 leaderboard spot) later
+-- stops being true.
+create table if not exists badges (
+  id bigint generated always as identity primary key,
+  user_id uuid references auth.users(id) on delete cascade not null,
+  badge_key text not null,
+  earned_at timestamptz default now(),
+  unique (user_id, badge_key)
+);
+
+alter table badges enable row level security;
+
+create policy "Users can view their own badges"
+  on badges for select
+  to authenticated
+  using (auth.uid() = user_id);
+
+create policy "Users can insert their own badges"
+  on badges for insert
+  to authenticated
+  with check (auth.uid() = user_id);

@@ -2,6 +2,7 @@
 
 import { createClient } from '@/lib/supabase/server';
 import { getDayNumber } from '@/lib/challenges';
+import { checkAndAwardBadges } from '@/lib/badges';
 import { revalidatePath } from 'next/cache';
 
 export async function markToday() {
@@ -20,8 +21,17 @@ export async function markToday() {
     return { error: error.message };
   }
 
+  try {
+    const { data: completions } = await supabase.from('completions').select('day').eq('user_id', user.id);
+    const completedDays = new Set((completions || []).map((c) => c.day));
+    await checkAndAwardBadges(supabase, user.id, completedDays);
+  } catch {
+    // Badge awarding is best-effort — never block a successful tick-in on it.
+  }
+
   revalidatePath('/today');
   revalidatePath('/progress');
   revalidatePath('/leaderboard');
+  revalidatePath('/dashboard');
   return { success: true };
 }

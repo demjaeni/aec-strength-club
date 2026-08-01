@@ -1,7 +1,7 @@
 import { createServerClient } from '@supabase/ssr';
 import { NextResponse } from 'next/server';
 
-const PROTECTED_PATHS = ['/today', '/progress', '/leaderboard'];
+const PROTECTED_PATHS = ['/today', '/progress', '/leaderboard', '/dashboard'];
 const AUTH_PATHS = ['/sign-in', '/sign-up'];
 
 export async function middleware(request) {
