@@ -26,7 +26,7 @@ export default async function ProgressPage() {
             if (done) status = 'done';
             else if (ch.day === dayNum) status = 'today';
             else if (ch.day < dayNum) status = 'missed';
-            else if (ch.day <= dayNum + 2) status = 'preview';
+            else if (ch.day <= dayNum + 2 && ch.day !== 60) status = 'preview';
 
             const revealed = status !== 'locked';
             const label = revealed ? (ch.text || ch.title || ch.intro) : 'Revealed 2 days before it\u2019s due.';
