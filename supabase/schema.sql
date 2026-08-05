@@ -76,16 +76,27 @@ create policy "Users can insert their own completions"
 -- (not even the member who ticked it) can change or remove that row. That's
 -- what makes the lock-after-tick rule real at the database level, not just in the UI.
 
--- Leaderboard view: total completed per member only — no daily detail exposed,
--- matching the "names + score only" decision. This view is owned by the
--- database role that creates it, so it can aggregate across everyone's
--- completions even though the completions table itself restricts each member
--- to their own rows.
+-- Leaderboard view: total completed per member, plus a rank that's already
+-- tiebroken — no daily detail or timestamps exposed, matching the "names +
+-- score only" decision. This view is owned by the database role that creates
+-- it, so it can aggregate across everyone's completions even though the
+-- completions table itself restricts each member to their own rows.
+--
+-- Tiebreak: among members with the same total_completed, whoever reached
+-- that count first ranks higher. max(completed_at) for a member is exactly
+-- the moment their most recent completion landed — i.e. the moment they
+-- reached their current total — so ordering by it ascending puts the
+-- earliest-to-reach-that-count member first. The timestamp itself is only
+-- ever used inside this window function, never returned as a column.
 create or replace view leaderboard as
   select
     profiles.id,
     profiles.name,
-    count(completions.id)::int as total_completed
+    count(completions.id)::int as total_completed,
+    rank() over (
+      order by count(completions.id) desc,
+               max(completions.completed_at) asc nulls last
+    ) as rank
   from profiles
   left join completions on completions.user_id = profiles.id
   group by profiles.id, profiles.name;

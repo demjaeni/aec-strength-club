@@ -1,5 +1,6 @@
 import { createClient } from '@/lib/supabase/server';
 import { CHALLENGES, getDayNumber } from '@/lib/challenges';
+import { markToday } from '@/app/actions/challenge';
 import Header from '@/components/Header';
 import BottomNav from '@/components/BottomNav';
 import { Lock } from 'lucide-react';
@@ -30,19 +31,26 @@ export default async function ProgressPage() {
 
             const revealed = status !== 'locked';
             const label = revealed ? (ch.text || ch.title || ch.intro) : 'Revealed 2 days before it\u2019s due.';
+            const catchable = status === 'missed' && ch.day >= dayNum - 2;
 
             return (
               <div className="progress-row" key={ch.day}>
                 <span className="pnum">D{ch.day}</span>
                 <span className="picon">{revealed ? ch.icon : <Lock size={14} />}</span>
                 <span className={`ptext ${revealed ? '' : 'ptext-hidden'}`}>{label}</span>
-                <span className={`pstatus pstatus-${status}`}>
-                  {status === 'done' && 'Done'}
-                  {status === 'missed' && 'Missed'}
-                  {status === 'today' && 'Today'}
-                  {status === 'preview' && 'Preview'}
-                  {status === 'locked' && 'Locked'}
-                </span>
+                {catchable ? (
+                  <form action={markToday.bind(null, ch.day)}>
+                    <button type="submit" className="catchup-btn">Mark done</button>
+                  </form>
+                ) : (
+                  <span className={`pstatus pstatus-${status}`}>
+                    {status === 'done' && 'Done'}
+                    {status === 'missed' && 'Missed'}
+                    {status === 'today' && 'Today'}
+                    {status === 'preview' && 'Preview'}
+                    {status === 'locked' && 'Locked'}
+                  </span>
+                )}
               </div>
             );
           })}

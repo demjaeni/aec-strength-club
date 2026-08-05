@@ -57,7 +57,7 @@ export default async function TodayPage() {
                 <Lock size={16} /> Completed — locked in
               </button>
             ) : (
-              <form action={markToday}>
+              <form action={markToday.bind(null, dayNum)}>
                 <button className="tick-btn" type="submit">
                   <Check size={16} /> Mark today as done
                 </button>

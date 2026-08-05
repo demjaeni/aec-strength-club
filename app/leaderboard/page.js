@@ -10,8 +10,8 @@ export default async function LeaderboardPage() {
 
   const { data: rows } = await supabase
     .from('leaderboard')
-    .select('*')
-    .order('total_completed', { ascending: false });
+    .select('id, name, total_completed, rank')
+    .order('rank', { ascending: true });
 
   return (
     <div className="shell">
@@ -19,15 +19,14 @@ export default async function LeaderboardPage() {
       <div className="main">
         <div className="lb-list">
           {(!rows || rows.length === 0) && <div className="empty-msg">No members yet.</div>}
-          {rows && rows.map((row, i) => {
-            const rank = i + 1;
-            const medal = rank === 1 ? 'gold' : rank === 2 ? 'silver' : rank === 3 ? 'bronze' : null;
+          {rows && rows.map((row) => {
+            const medal = row.rank === 1 ? 'gold' : row.rank === 2 ? 'silver' : row.rank === 3 ? 'bronze' : null;
             return (
               <div className={`lb-row ${row.id === user.id ? 'me' : ''}`} key={row.id}>
                 {medal ? (
-                  <span className={`lb-medal lb-medal-${medal}`}>{rank}</span>
+                  <span className={`lb-medal lb-medal-${medal}`}>{row.rank}</span>
                 ) : (
-                  <span className="lb-rank">{rank}</span>
+                  <span className="lb-rank">{row.rank}</span>
                 )}
                 <span className="lb-name">{row.name}{row.id === user.id ? ' (you)' : ''}</span>
                 <span className="lb-score">{row.total_completed}/60</span>
