@@ -82,12 +82,14 @@ create policy "Users can insert their own completions"
 -- it, so it can aggregate across everyone's completions even though the
 -- completions table itself restricts each member to their own rows.
 --
--- Tiebreak: among members with the same total_completed, whoever reached
--- that count first ranks higher. max(completed_at) for a member is exactly
--- the moment their most recent completion landed — i.e. the moment they
--- reached their current total — so ordering by it ascending puts the
--- earliest-to-reach-that-count member first. The timestamp itself is only
--- ever used inside this window function, never returned as a column.
+-- Tiebreak: among members with the same total_completed, reward promptness
+-- across their WHOLE history rather than just their most recent tick.
+-- sum(extract(epoch from completed_at)) adds up every completion's timestamp
+-- (as seconds since epoch) — a member who consistently ticks early every day
+-- accumulates a lower sum than one who ticks late, even if both land on the
+-- same total right now. Ordering by that sum ascending ranks the more
+-- consistently-prompt member higher. The timestamps themselves are only ever
+-- used inside this window function, never returned as a column.
 create or replace view leaderboard as
   select
     profiles.id,
@@ -95,7 +97,7 @@ create or replace view leaderboard as
     count(completions.id)::int as total_completed,
     rank() over (
       order by count(completions.id) desc,
-               max(completions.completed_at) asc nulls last
+               sum(extract(epoch from completions.completed_at)) asc nulls last
     ) as rank
   from profiles
   left join completions on completions.user_id = profiles.id
