@@ -5,6 +5,20 @@ import Header from '@/components/Header';
 import BottomNav from '@/components/BottomNav';
 import { Lock } from 'lucide-react';
 
+// Compact one-line summary for the progress list. Most days just have
+// `text`; the finale has a `title` short enough to stand alone; a few days
+// (like Day 46) are an intro + item list + closing line instead of plain
+// text — those need stitching together or they'd silently show only the intro.
+function summarize(ch) {
+  if (ch.text) return ch.text;
+  if (ch.items) {
+    const items = ch.items.join(', ');
+    const base = ch.intro ? `${ch.intro} ${items}` : items;
+    return ch.after ? `${base} — ${ch.after}` : base;
+  }
+  return ch.title || ch.intro || '';
+}
+
 export default async function ProgressPage() {
   const supabase = createClient();
   const { data: { user } } = await supabase.auth.getUser();
@@ -30,7 +44,7 @@ export default async function ProgressPage() {
             else if (ch.day <= dayNum + 2 && ch.day !== 60) status = 'preview';
 
             const revealed = status !== 'locked';
-            const label = revealed ? (ch.text || ch.title || ch.intro) : 'Revealed 2 days before it\u2019s due.';
+            const label = revealed ? summarize(ch) : 'Revealed 2 days before it\u2019s due.';
             const catchable = status === 'missed' && ch.day >= dayNum - 2;
 
             return (
